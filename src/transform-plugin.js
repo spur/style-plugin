@@ -2,7 +2,7 @@ var objectAssign = require('object-assign');
 
 function TransformPlugin(component) {
   this.component = component;
-  let transform = component.props.transform || {};
+  var transform = component.props.transform || {};
   this.x = transform.x !== undefined ? transform.x : null;
   this.y = transform.y !== undefined ? transform.y : null;
   this.offsetX = 0;
@@ -117,7 +117,7 @@ TransformPlugin.prototype.scaleTo = function (scale, time) {
 
   this.isTransitioning = true;
   window.clearTimeout(this.transformToTimeout);
-  let backupTransition = this.transition;
+  var backupTransition = this.transition;
   this.transition = 'transform ' + time + 'ms linear';
   this.setScale(scale);
 
@@ -141,25 +141,25 @@ TransformPlugin.prototype.transform = function (transform, silently) {
 };
 
 TransformPlugin.prototype.transformTo = function (transform) {
-  let x = transform.hasOwnProperty('x') ? transform.x : this.x;
-  let y = transform.hasOwnProperty('y') ? transform.y : this.y;
+  var x = transform.hasOwnProperty('x') ? transform.x : this.x;
+  var y = transform.hasOwnProperty('y') ? transform.y : this.y;
 
-  let time = transform.time;
+  var time = transform.time;
   if (!transform.hasOwnProperty('time')) {
-    let deltaX = this.x - x;
-    let deltaY = this.y - y;
-    let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    var deltaX = this.x - x;
+    var deltaY = this.y - y;
+    var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     time = Math.floor(distance / this.speed);
   }
 
   this.isTransitioning = true;
   window.clearTimeout(this.transformToTimeout);
 
-  let backupTransition = this.transition;
+  var backupTransition = this.transition;
   this.setTransition('transform ' + time + 'ms linear', true);
   this.transform(transform);
 
-  let self = this;
+  var self = this;
   return new Promise((resolve) => {
     self.transformToTimeout = window.setTimeout(() => {
       self.isTransitioning = false;
