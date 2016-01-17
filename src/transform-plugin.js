@@ -2,18 +2,17 @@ var objectAssign = require('object-assign');
 
 function TransformPlugin(component) {
   this.component = component;
-  var transform = component.props.transform || {};
-  this.x = transform.x !== undefined ? transform.x : null;
-  this.y = transform.y !== undefined ? transform.y : null;
+  this.x = null;
+  this.y = null;
   this.offsetX = 0;
   this.offsetY = 0;
-  this.scale = transform.scale !== undefined ? transform.scale : null;
-  this.width = transform.width !== undefined ? transform.width : null;
-  this.height = transform.height !== undefined ? transform.height : null;
+  this.scale = null;
+  this.width = null;
+  this.height = null;
   this.speed = 1.7;
-  this.rotation = transform.rotation !== undefined ? transform.rotation : null;
-  this.transition = transform.transition !== undefined ? transform.transition : null;
-  this.display = transform.display !== undefined ? transform.display : null;
+  this.rotation = null;
+  this.transition = null;
+  this.display = null;
   this.customStyle = {};
 
   this.unit = {
@@ -42,7 +41,9 @@ TransformPlugin.prototype.getStyleState = function () {
   if (this.x !== null || this.y !== null) { transform += 'translate3d(' + (this.x || 0) + this.unit.x + ',' + (this.y || 0) + this.unit.y + ',0px)'; }
   if (this.scale !== null ) { transform += 'scale(' + (this.scale) + ')'; }
   if (this.rotation !== null ) { transform += 'rotation(' + (this.rotation) + this.unit.rotation + ')'; }
-  style['transform'] = transform;
+  if (transform !== '') {
+    style['transform'] = transform;
+  }
 
   return style;
 };
@@ -51,8 +52,29 @@ TransformPlugin.prototype.updateStyleState = function () {
   this.component.setState({ transformStyle: this.getStyleState() });
 };
 
+TransformPlugin.prototype.updateFromProps = function (transform) {
+  if (transform.x !== undefined) { this.x = transform.x; }
+  if (transform.y !== undefined) { this.y = transform.y; }
+  if (transform.scale !== undefined) { this.scale = transform.scale; }
+  if (transform.rotation !== undefined) { this.rotation = transform.rotation; }
+  if (transform.width !== undefined) { this.width = transform.width; }
+  if (transform.height !== undefined) { this.height = transform.height; }
+  if (transform.transition !== undefined) { this.transition = transform.transition; }
+  if (transform.display !== undefined) { this.display = transform.display; }
+};
+
 TransformPlugin.prototype.componentWillMount = function () {
+  if (this.component.props.transform) {
+    this.updateFromProps(this.component.props.transform);
+  }
   this.updateStyleState();
+};
+
+TransformPlugin.prototype.componentWillReceiveProps = function (nextProps) {
+  if (nextProps.transform) {
+    this.updateFromProps(nextProps.transform);
+    this.updateStyleState();
+  }
 };
 
 TransformPlugin.prototype.setUnits = function (units) {
