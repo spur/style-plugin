@@ -63,6 +63,7 @@ TransformPlugin.prototype.updateFromProps = function (transform) {
   if (transform.height !== undefined) { this.height = transform.height; }
   if (transform.transition !== undefined) { this.transition = transform.transition; }
   if (transform.display !== undefined) { this.display = transform.display; }
+  if (transform.customStyle !== undefined) { this.customStyle = transform.customStyle; }
 };
 
 TransformPlugin.prototype.componentWillMount = function () {
