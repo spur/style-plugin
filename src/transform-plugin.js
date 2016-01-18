@@ -9,6 +9,7 @@ function TransformPlugin(component) {
   this.scale = null;
   this.width = null;
   this.height = null;
+  this.opacity = null;
   this.speed = 1.7;
   this.rotation = null;
   this.transition = null;
@@ -57,6 +58,7 @@ TransformPlugin.prototype.updateFromProps = function (transform) {
   if (transform.y !== undefined) { this.y = transform.y; }
   if (transform.scale !== undefined) { this.scale = transform.scale; }
   if (transform.rotation !== undefined) { this.rotation = transform.rotation; }
+  if (transform.opacity !== undefined) { this.opacity = transform.opacity; }
   if (transform.width !== undefined) { this.width = transform.width; }
   if (transform.height !== undefined) { this.height = transform.height; }
   if (transform.transition !== undefined) { this.transition = transform.transition; }
@@ -143,12 +145,13 @@ TransformPlugin.prototype.scaleTo = function (scale, time) {
   this.transition = 'transform ' + time + 'ms linear';
   this.setScale(scale);
 
-  return new Promise((resolve, reject) => {
-    this.transformToTimeout = window.setTimeout(() => {
-      window.clearTimeout(this.transformToTimeout);
-      this.isTransitioning = false;
-      this.transition = backupTransition;
-      this.updateStyleState();
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    self.transformToTimeout = window.setTimeout(function () {
+      window.clearTimeout(self.transformToTimeout);
+      self.isTransitioning = false;
+      self.transition = backupTransition;
+      self.updateStyleState();
       resolve();
     }, time);
   });
@@ -182,22 +185,23 @@ TransformPlugin.prototype.transformTo = function (transform) {
   this.transform(transform);
 
   var self = this;
-  return new Promise((resolve) => {
-    self.transformToTimeout = window.setTimeout(() => {
+  return new Promise(function (resolve) {
+    self.transformToTimeout = window.setTimeout(function () {
       self.isTransitioning = false;
       self.transformCallback = null;
       self.setTransition(backupTransition);
       resolve();
     }, time);
-  }).catch((e) => {
+  }).catch(function (e) {
     console.error('TransformPlugin.transformTo', e);
   });
 };
 
 TransformPlugin.prototype.show = function (silently) {
-  return new Promise((fulfill) => {
-    this.display = '';
-    if (!silently) { this.updateStyleState(); }
+  var self = this;
+  return new Promise(function (fulfill) {
+    self.display = '';
+    if (!silently) { self.updateStyleState(); }
     fulfill();
   })
 };
