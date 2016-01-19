@@ -54,16 +54,11 @@ TransformPlugin.prototype.updateStyleState = function () {
 };
 
 TransformPlugin.prototype.updateFromProps = function (transform) {
-  if (transform.x !== undefined) { this.x = transform.x; }
-  if (transform.y !== undefined) { this.y = transform.y; }
-  if (transform.scale !== undefined) { this.scale = transform.scale; }
-  if (transform.rotation !== undefined) { this.rotation = transform.rotation; }
-  if (transform.opacity !== undefined) { this.opacity = transform.opacity; }
-  if (transform.width !== undefined) { this.width = transform.width; }
-  if (transform.height !== undefined) { this.height = transform.height; }
-  if (transform.transition !== undefined) { this.transition = transform.transition; }
-  if (transform.display !== undefined) { this.display = transform.display; }
-  if (transform.customStyle !== undefined) { this.customStyle = transform.customStyle; }
+  for (var property in transform) {
+    if (transform.hasOwnProperty(property)) {
+      this[property] = transform[property];
+    }
+  }
 };
 
 TransformPlugin.prototype.componentWillMount = function () {
