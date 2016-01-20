@@ -54,24 +54,31 @@ TransformPlugin.prototype.updateStyleState = function () {
 };
 
 TransformPlugin.prototype.updateFromProps = function (transform) {
+  var changed = false;
   for (var property in transform) {
-    if (transform.hasOwnProperty(property)) {
+    var transformValue = transform[property];
+    if (transform.hasOwnProperty(property) && this[property] !== transformValue) {
       this[property] = transform[property];
+      changed = true;
     }
+  }
+
+  if (changed) {
+    this.updateStyleState();
   }
 };
 
 TransformPlugin.prototype.componentWillMount = function () {
   if (this.component.props.transform) {
     this.updateFromProps(this.component.props.transform);
+  } else {
+    this.updateStyleState();
   }
-  this.updateStyleState();
 };
 
 TransformPlugin.prototype.componentWillReceiveProps = function (nextProps) {
   if (nextProps.transform) {
     this.updateFromProps(nextProps.transform);
-    this.updateStyleState();
   }
 };
 
@@ -154,11 +161,16 @@ TransformPlugin.prototype.scaleTo = function (scale, time) {
 };
 
 TransformPlugin.prototype.transform = function (transform, silently) {
-  if (transform.x !== undefined) { this.x = transform.x; }
-  if (transform.y !== undefined) { this.y = transform.y; }
-  if (transform.scale !== undefined) { this.scale = transform.scale; }
-  if (transform.rotation !== undefined) { this.rotation = transform.rotation; }
-  if (!silently) { this.updateStyleState(); }
+  var changed = false;
+  for (var property in transform) {
+    var transformValue = transform[property];
+    if (transform.hasOwnProperty(property) && this[property] !== transformValue) {
+      console.log(property, this[property], transformValue)
+      this[property] = transformValue;
+      changed = true;
+    }
+  }
+  if (!silently && changed) { this.updateStyleState(); }
 };
 
 TransformPlugin.prototype.transformTo = function (transform) {
