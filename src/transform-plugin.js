@@ -166,7 +166,6 @@ TransformPlugin.prototype.transform = function (transform, silently) {
   for (var property in transform) {
     var transformValue = transform[property];
     if (transform.hasOwnProperty(property) && this[property] !== transformValue) {
-      console.log(property, this[property], transformValue)
       this[property] = transformValue;
       changed = true;
     }
