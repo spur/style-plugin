@@ -173,11 +173,11 @@ TransformPlugin.prototype.transform = function (transform, silently) {
 };
 
 TransformPlugin.prototype.transformTo = function (transform) {
-  var x = transform.hasOwnProperty('x') ? transform.x : this.x;
-  var y = transform.hasOwnProperty('y') ? transform.y : this.y;
-
   var time = transform.time;
   if (!transform.hasOwnProperty('time')) {
+    var x = transform.hasOwnProperty('x') ? transform.x : this.x;
+    var y = transform.hasOwnProperty('y') ? transform.y : this.y;
+
     var deltaX = this.x - x;
     var deltaY = this.y - y;
     var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
