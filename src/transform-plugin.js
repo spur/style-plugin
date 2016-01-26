@@ -42,7 +42,7 @@ TransformPlugin.prototype.getStyleState = function () {
   var transform = '';
   if (this.x !== null || this.y !== null) { transform += 'translate3d(' + (this.x || 0) + unit.x + ',' + (this.y || 0) + unit.y + ',0px) '; }
   if (this.scale !== null ) { transform += 'scale(' + (this.scale) + ') '; }
-  if (this.rotation !== null ) { transform += 'rotation(' + (this.rotation) + unit.rotation + ')'; }
+  if (this.rotation !== null ) { transform += 'rotate(' + (this.rotation) + unit.rotation + ')'; }
   if (transform !== '') {
     style['transform'] = transform;
   }
@@ -154,8 +154,7 @@ TransformPlugin.prototype.scaleTo = function (scale, time) {
     self.transformToTimeout = window.setTimeout(function () {
       window.clearTimeout(self.transformToTimeout);
       self.isTransitioning = false;
-      self.transition = backupTransition;
-      self.updateStyleState();
+      self.setTransition(backupTransition);
       resolve();
     }, time);
   });
@@ -196,7 +195,6 @@ TransformPlugin.prototype.transformTo = function (transform) {
   return new Promise(function (resolve) {
     self.transformToTimeout = window.setTimeout(function () {
       self.isTransitioning = false;
-      self.transformCallback = null;
       self.setTransition(backupTransition);
       resolve();
     }, time);
