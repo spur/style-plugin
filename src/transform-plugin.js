@@ -153,15 +153,15 @@ TransformPlugin.prototype.transform = function (transform, silently) {
 };
 
 TransformPlugin.prototype.transformTo = function (transform) {
-	var time = transform.time;
-	if (!transform.hasOwnProperty('time')) {
+	var duration = transform.duration;
+	if (!transform.hasOwnProperty('duration')) {
 		var x = transform.hasOwnProperty('x') ? transform.x : this.x;
 		var y = transform.hasOwnProperty('y') ? transform.y : this.y;
 
 		var deltaX = this.x - x;
 		var deltaY = this.y - y;
 		var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-		time = Math.floor(distance / this.speed);
+		duration = Math.floor(distance / this.speed);
 	}
 
 	if (this.isTransitioning) {
@@ -172,7 +172,7 @@ TransformPlugin.prototype.transformTo = function (transform) {
 		var backupTransition = this.transition;
 	}
 
-	this.setTransition('transform ' + time + 'ms linear', true);
+	this.setTransition('transform ' + duration + 'ms linear', true);
 	this.transform(transform);
 
 	var self = this;
@@ -183,7 +183,7 @@ TransformPlugin.prototype.transformTo = function (transform) {
 			self.setTransition(backupTransition);
 			self.transformToResolve = null;
 			resolve();
-		}, time);
+		}, duration);
 	}).catch(function (e) {
 		console.error('TransformPlugin.transformTo', e);
 	});
