@@ -51,7 +51,9 @@ TransformPlugin.prototype.getStyleState = function () {
 };
 
 TransformPlugin.prototype.updateStyleState = function () {
-	this.component.setState({ transformStyle: this.getStyleState() });
+	if (this.component) {
+		this.component.setState({ transformStyle: this.getStyleState() });
+	}
 };
 
 TransformPlugin.prototype.updateFromProps = function (transform) {
@@ -75,6 +77,10 @@ TransformPlugin.prototype.componentWillMount = function () {
 	} else {
 		this.updateStyleState();
 	}
+};
+
+TransformPlugin.prototype.componentWillUnmount = function () {
+	this.component = null;
 };
 
 TransformPlugin.prototype.componentWillReceiveProps = function (nextProps) {
