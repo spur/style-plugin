@@ -172,7 +172,7 @@ TransformPlugin.prototype.transformTo = function (transform) {
 
 	if (this.isTransitioning) {
 		window.clearTimeout(this.transformToTimeout);
-		this.transformToResolve();
+		this.transformToResolve(true);
 	} else {
 		this.isTransitioning = true;
 		var backupTransition = this.transition;
