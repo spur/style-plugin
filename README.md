@@ -1,2 +1,2 @@
-# transform-plugin
-DOM manipulation plugin for React component.
+# style-plugin
+DOM style manipulation plugin for React component.

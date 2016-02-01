@@ -1,6 +1,6 @@
 var objectAssign = require('object-assign');
 
-function TransformPlugin(component) {
+function StylePlugin(component) {
 	this.component = component;
 	this.x = null;
 	this.y = null;
@@ -25,12 +25,12 @@ function TransformPlugin(component) {
 	};
 };
 
-TransformPlugin.prototype.setCustomStyle = function (style, silently) {
+StylePlugin.prototype.setCustomStyle = function (style, silently) {
 	this.customStyle = style;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.getStyleState = function () {
+StylePlugin.prototype.getStyleState = function () {
 	var style = objectAssign({}, this.customStyle);
 	var unit = this.unit;
 	if (this.width !== null) { style['width'] = this.width + unit.width; }
@@ -50,18 +50,18 @@ TransformPlugin.prototype.getStyleState = function () {
 	return style;
 };
 
-TransformPlugin.prototype.updateStyleState = function () {
+StylePlugin.prototype.updateStyleState = function () {
 	if (this.component) {
-		this.component.setState({ transformStyle: this.getStyleState() });
+		this.component.setState({ style: this.getStyleState() });
 	}
 };
 
-TransformPlugin.prototype.updateFromProps = function (transform) {
+StylePlugin.prototype.updateFromProps = function (style) {
 	var changed = false;
-	for (var property in transform) {
-		var transformValue = transform[property];
-		if (transform.hasOwnProperty(property) && this[property] !== transformValue) {
-			this[property] = transform[property];
+	for (var property in style) {
+		var styleValue = style[property];
+		if (style.hasOwnProperty(property) && this[property] !== styleValue) {
+			this[property] = style[property];
 			changed = true;
 		}
 	}
@@ -71,82 +71,82 @@ TransformPlugin.prototype.updateFromProps = function (transform) {
 	}
 };
 
-TransformPlugin.prototype.componentWillMount = function () {
-	if (this.component.props.transform) {
-		this.updateFromProps(this.component.props.transform);
+StylePlugin.prototype.componentWillMount = function () {
+	if (this.component.props.style) {
+		this.updateFromProps(this.component.props.style);
 	} else {
 		this.updateStyleState();
 	}
 };
 
-TransformPlugin.prototype.componentWillUnmount = function () {
+StylePlugin.prototype.componentWillUnmount = function () {
 	this.component = null;
 };
 
-TransformPlugin.prototype.componentWillReceiveProps = function (nextProps) {
-	if (nextProps.transform) {
-		this.updateFromProps(nextProps.transform);
+StylePlugin.prototype.componentWillReceiveProps = function (nextProps) {
+	if (nextProps.style) {
+		this.updateFromProps(nextProps.style);
 	}
 };
 
-TransformPlugin.prototype.setUnits = function (units) {
+StylePlugin.prototype.setUnits = function (units) {
 	for (var property in units) {
 		this.unit[property] = units[property];
 	}
 };
 
-TransformPlugin.prototype.setUnit = function (property, unit) {
+StylePlugin.prototype.setUnit = function (property, unit) {
 	this.unit[property] = unit;
 };
 
-TransformPlugin.prototype.setTransition = function (transition, silently) {
+StylePlugin.prototype.setTransition = function (transition, silently) {
 	this.transition = transition;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setDimensions = function (width, height, silently) {
+StylePlugin.prototype.setDimensions = function (width, height, silently) {
 	this.width = width;
 	this.height = height;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setWidth = function (width, silently) {
+StylePlugin.prototype.setWidth = function (width, silently) {
 	this.width = width;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setHeight = function (height, silently) {
+StylePlugin.prototype.setHeight = function (height, silently) {
 	this.height = height;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setOpacity = function (opacity, silently) {
+StylePlugin.prototype.setOpacity = function (opacity, silently) {
 	this.opacity = opacity;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setPositionOffset = function (offsetX, offsetY) {
+StylePlugin.prototype.setPositionOffset = function (offsetX, offsetY) {
 	this.offsetX = offsetX;
 	this.offsetY = offsetY;
 };
 
-TransformPlugin.prototype.setPosition = function (x, y, silently) {
+StylePlugin.prototype.setPosition = function (x, y, silently) {
 	this.x = x;
 	this.y = y;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setScale = function (scale, silently) {
+StylePlugin.prototype.setScale = function (scale, silently) {
 	this.scale = scale;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.setRotation = function (rotation, silently) {
+StylePlugin.prototype.setRotation = function (rotation, silently) {
 	this.rotation = rotation;
 	if (!silently) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.transform = function (transform, silently) {
+StylePlugin.prototype.transform = function (transform, silently) {
 	var changed = false;
 	for (var property in transform) {
 		var transformValue = transform[property];
@@ -158,7 +158,7 @@ TransformPlugin.prototype.transform = function (transform, silently) {
 	if (!silently && changed) { this.updateStyleState(); }
 };
 
-TransformPlugin.prototype.transformTo = function (transform) {
+StylePlugin.prototype.transformTo = function (transform) {
 	var duration = transform.duration;
 	if (!transform.hasOwnProperty('duration')) {
 		var x = transform.hasOwnProperty('x') ? transform.x : this.x;
@@ -191,11 +191,11 @@ TransformPlugin.prototype.transformTo = function (transform) {
 			resolve();
 		}, duration);
 	}).catch(function (e) {
-		console.error('TransformPlugin.transformTo', e);
+		console.error('StylePlugin.transformTo', e);
 	});
 };
 
-TransformPlugin.prototype.show = function (silently) {
+StylePlugin.prototype.show = function (silently) {
 	var self = this;
 	return new Promise(function (fulfill) {
 		self.display = '';
@@ -204,9 +204,9 @@ TransformPlugin.prototype.show = function (silently) {
 	})
 };
 
-TransformPlugin.prototype.hide = function (silently) {
+StylePlugin.prototype.hide = function (silently) {
 	this.display = 'none';
 	if (!silently) { this.updateStyleState(); }
 };
 
-module.exports = TransformPlugin;
+module.exports = StylePlugin;
