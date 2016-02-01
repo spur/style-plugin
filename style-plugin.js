@@ -155,6 +155,7 @@ StylePlugin.prototype.transform = function (transform, silently) {
 			changed = true;
 		}
 	}
+
 	if (!silently && changed) { this.updateStyleState(); }
 };
 
@@ -175,7 +176,7 @@ StylePlugin.prototype.transformTo = function (transform) {
 		this.transformToResolve(true);
 	} else {
 		this.isTransitioning = true;
-		var backupTransition = this.transition;
+		this.backupTransition = this.transition;
 	}
 
 	this.setTransition('transform ' + duration + 'ms linear', true);
@@ -186,7 +187,7 @@ StylePlugin.prototype.transformTo = function (transform) {
 		self.transformToResolve = resolve;
 		self.transformToTimeout = window.setTimeout(function () {
 			self.isTransitioning = false;
-			self.setTransition(backupTransition);
+			self.setTransition(self.backupTransition);
 			self.transformToResolve = null;
 			resolve();
 		}, duration);
