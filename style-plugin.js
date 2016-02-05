@@ -146,17 +146,28 @@ StylePlugin.prototype.setRotation = function (rotation, silently) {
 	if (!silently) { this.updateStyleState(); }
 };
 
-StylePlugin.prototype.transform = function (transform, silently) {
+StylePlugin.prototype.setProperty = function (property, value, silently) {
+	if (this.hasOwnProperty(property) && this[property] !== value) {
+		this[property] = value;
+		if (!silently) { this.updateStyleState(); }
+	}
+};
+
+StylePlugin.prototype.setProperties = function (properties, silently) {
 	var changed = false;
-	for (var property in transform) {
-		var transformValue = transform[property];
-		if (transform.hasOwnProperty(property) && this[property] !== transformValue) {
-			this[property] = transformValue;
+	for (var property in properties) {
+		var value = properties[property];
+		if (properties.hasOwnProperty(property) && this[property] !== value) {
+			this[property] = value;
 			changed = true;
 		}
 	}
 
 	if (!silently && changed) { this.updateStyleState(); }
+};
+
+StylePlugin.prototype.transform = function (transform, silently) {
+	this.setProperties(transform, silently);
 };
 
 StylePlugin.prototype.transformTo = function (transform) {
