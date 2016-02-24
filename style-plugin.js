@@ -11,7 +11,7 @@ function StylePlugin(component) {
 	this.height = null;
 	this.opacity = null;
 	this.speed = 1.7;
-	this.rotation = null;
+	this.rotate = null;
 	this.transition = null;
 	this.display = null;
 	this.customStyle = {};
@@ -21,7 +21,7 @@ function StylePlugin(component) {
 		y: 'px',
 		width: 'px',
 		height: 'px',
-		rotation: 'rad'
+		rotate: 'rad'
 	};
 };
 
@@ -42,7 +42,7 @@ StylePlugin.prototype.getStyleState = function () {
 	var transform = '';
 	if (this.x !== null || this.y !== null) { transform += 'translate3d(' + (this.x || 0) + unit.x + ',' + (this.y || 0) + unit.y + ',0px) '; }
 	if (this.scale !== null ) { transform += 'scale(' + (this.scale) + ') '; }
-	if (this.rotation !== null ) { transform += 'rotate(' + (this.rotation) + unit.rotation + ')'; }
+	if (this.rotate !== null ) { transform += 'rotate(' + (this.rotate) + unit.rotate + ')'; }
 	if (transform !== '') {
 		style['transform'] = transform;
 	}
@@ -141,8 +141,8 @@ StylePlugin.prototype.setScale = function (scale, silently) {
 	if (!silently) { this.updateStyleState(); }
 };
 
-StylePlugin.prototype.setRotation = function (rotation, silently) {
-	this.rotation = rotation;
+StylePlugin.prototype.setRotation = function (rotate, silently) {
+	this.rotate = rotate;
 	if (!silently) { this.updateStyleState(); }
 };
 
