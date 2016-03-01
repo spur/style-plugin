@@ -25,6 +25,8 @@ function StylePlugin(component) {
 	};
 };
 
+StylePlugin.plugName = 'style';
+
 StylePlugin.prototype.setCustomStyle = function (style, silently) {
 	this.customStyle = style;
 	if (!silently) { this.updateStyleState(); }
