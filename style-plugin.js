@@ -23,7 +23,7 @@ function StylePlugin(component) {
 		height: 'px',
 		rotate: 'rad'
 	};
-};
+}
 
 StylePlugin.plugName = 'style';
 
@@ -33,20 +33,22 @@ StylePlugin.prototype.setCustomStyle = function (style, silently) {
 };
 
 StylePlugin.prototype.getStyleState = function () {
-	var style = objectAssign({}, this.customStyle);
+	var style = objectAssign({}, (this.customStyle || {}));
 	var unit = this.unit;
-	if (this.width !== null) { style['width'] = this.width + unit.width; }
-	if (this.height !== null) { style['height'] = this.height + unit.width; }
-	if (this.opacity !== null) { style['opacity'] = this.opacity; }
-	if (this.transition !== null) { style['transition'] = this.transition; }
-	if (this.display !== null) { style['display'] = this.display; }
+	if (this.width !== null) { style.width = this.width + unit.width; }
+	if (this.height !== null) { style.height = this.height + unit.width; }
+	if (this.opacity !== null) { style.opacity = this.opacity; }
+	if (this.transition !== null) { style.transition = this.transition; }
+	if (this.display !== null) { style.display = this.display; }
 
 	var transform = '';
-	if (this.x !== null || this.y !== null) { transform += 'translate3d(' + (this.x || 0) + unit.x + ',' + (this.y || 0) + unit.y + ',0px) '; }
-	if (this.scale !== null ) { transform += 'scale(' + (this.scale) + ') '; }
-	if (this.rotate !== null ) { transform += 'rotate(' + (this.rotate) + unit.rotate + ')'; }
+	if (this.x !== null || this.y !== null) {
+		transform += 'translate3d(' + (this.x || 0) + unit.x + ',' + (this.y || 0) + unit.y + ',0px) ';
+	}
+	if (this.scale !== null) { transform += 'scale(' + (this.scale) + ') '; }
+	if (this.rotate !== null) { transform += 'rotate(' + (this.rotate) + unit.rotate + ')'; }
 	if (transform !== '') {
-		style['transform'] = transform;
+		style.transform = transform;
 	}
 
 	return style;
@@ -192,7 +194,7 @@ StylePlugin.prototype.transformTo = function (transform) {
 		this.backupTransition = this.transition;
 	}
 
-	this.setTransition('transform ' + duration + 'ms linear', true);
+	this.setTransition('all ' + duration + 'ms linear', true);
 	this.transform(transform);
 
 	var self = this;
@@ -215,7 +217,7 @@ StylePlugin.prototype.show = function (silently) {
 		self.display = '';
 		if (!silently) { self.updateStyleState(); }
 		fulfill();
-	})
+	});
 };
 
 StylePlugin.prototype.hide = function (silently) {
