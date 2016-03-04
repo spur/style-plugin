@@ -12,6 +12,7 @@ function StylePlugin(component) {
 	this.opacity = null;
 	this.speed = 1.7;
 	this.rotate = null;
+	this.zIndex = null;
 	this.transition = null;
 	this.display = null;
 	this.customStyle = {};
@@ -40,6 +41,7 @@ StylePlugin.prototype.getStyleState = function () {
 	if (this.opacity !== null) { style.opacity = this.opacity; }
 	if (this.transition !== null) { style.transition = this.transition; }
 	if (this.display !== null) { style.display = this.display; }
+	if (this.zIndex !== null) { style.zIndex = this.zIndex; }
 
 	var transform = '';
 	if (this.x !== null || this.y !== null) {
@@ -97,6 +99,10 @@ StylePlugin.prototype.setUnits = function (units) {
 	for (var property in units) {
 		this.unit[property] = units[property];
 	}
+};
+
+StylePlugin.prototype.setZIndex = function (zIndex) {
+	this.zIndex = zIndex;
 };
 
 StylePlugin.prototype.setUnit = function (property, unit) {
