@@ -1,6 +1,6 @@
 {
   "name": "spur-style-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DOM style manipulation plugin for React component.",
   "main": "style-plugin.js",
   "repository": {
